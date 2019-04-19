@@ -8,12 +8,12 @@
 #define IN2_2 11
 
 #define LED1 10
-#define LED2 8
+#define LED2 9
+#define LED3 8
+#define LED4 7
 
 char action;
 
-L298N motor1(EN1,IN1_1,IN1_2);
-L298N motor2(EN2,IN2_1,IN2_2);
 
 void setup() {
   // put your setup code here, to run once:
@@ -22,7 +22,9 @@ void setup() {
   Serial.println("Connected");
 
   pinMode(LED1,OUTPUT);
-  pinMode(LED1,OUTPUT);
+  pinMode(LED2,OUTPUT);
+  pinMode(LED3,OUTPUT);
+  pinMode(LED4,OUTPUT);
 }
 
 void loop() {
@@ -33,64 +35,130 @@ void loop() {
     action = Serial.read();
     //Serial.println(action);
   }
+
+  switch(action){
+    case '1':
+      digitalWrite(LED1,HIGH);
+      delay(500);
+      off();
+      
+      break;
+      
+    case '2':
+      digitalWrite(LED2,HIGH);
+      delay(500);
+      off();
+
+      break;
+
+    case '3':
+      digitalWrite(LED3,HIGH);
+      delay(500);
+      off();
+      
+      break;
+      
+    case '4':
+      digitalWrite(LED4,HIGH);
+      delay(500);
+      off();
+
+      break;
+
+    case 'd':
+      ledbounce(10);
+
+      break;
+      
+    case 's':
+      ledline(10);
+
+      break;
+
+    case 'a':
+      altflicker(5);
+
+      break;
+    
+    case 'i':
+      int integer = Serial.parseInt();
+      Serial.println(integer);
   
-  if(action == 'f'){
+      break;
+  }
+}
+
+void ledline(int n){
+  int d = 50;
+  for(int i=0; i<n; i++){
     digitalWrite(LED1,HIGH);
-  }
-  else if(action == 'b'){
+    delay(d);
     digitalWrite(LED2,HIGH);
-  }
-  else if(action == 'i'){
-    int integer = Serial.parseInt();
-    Serial.println(integer);
-  }
-
-  else{
+    delay(d);
+    digitalWrite(LED3,HIGH);
     digitalWrite(LED1,LOW);
+    delay(d);
+    digitalWrite(LED4,HIGH);
     digitalWrite(LED2,LOW);
+    delay(d);
+    digitalWrite(LED3,LOW);
+    delay(d);
+    digitalWrite(LED4,LOW);
   }
-
-  delay(500);
 }
 
-
-
-
-void stopMotor(L298N m){
-  m.stop();
-}
-
-void backwardSpeed(L298N m,int s){
-  m.setSpeed(s);
-  m.backward();
-}
-
-void forwardSpeed(L298N m,int s){
-  m.setSpeed(s);
-  m.forward();
-}
-
-
-//BLOCKING
-void driveForward(int t){
-  forwardSpeed(motor1,255);
-  forwardSpeed(motor2,255);
-  delay(t);
-  stopMotor(motor1);
-  stopMotor(motor2);
-}
-
-//Dir is 1 or 0
-//BLOCKING
-void turn(int dir, int t){
-  if(dir==0){
-    forwardSpeed(motor1,255);
-    backwardSpeed(motor2,255);
-  } else {
-    forwardSpeed(motor2,255);
-    backwardSpeed(motor1,255);
+void ledbounce(int n){
+  int d = 50;
+  for(int i=0; i<n; i++){
+    digitalWrite(LED1,HIGH);
+    delay(d);
+    digitalWrite(LED2,HIGH);
+    delay(d);
+    digitalWrite(LED3,HIGH);
+    digitalWrite(LED1,LOW);
+    delay(d);
+    digitalWrite(LED4,HIGH);
+    digitalWrite(LED2,LOW);
+    delay(d);
+    digitalWrite(LED3,LOW);
+    delay(d);
+    
+    digitalWrite(LED3,HIGH);
+    delay(d);
+    digitalWrite(LED2,HIGH);
+    digitalWrite(LED4,LOW);
+    delay(d);
+    digitalWrite(LED1,HIGH);
+    digitalWrite(LED3,LOW);
+    delay(d);
+    digitalWrite(LED2,LOW);
+    delay(d);
+    digitalWrite(LED1,LOW);
   }
-  delay(t);
-  stopMotor(motor1);
-  stopMotor(motor2);
+}
+
+void altflicker(int n){
+  int d = 250;
+  for(int i=0;i<n;i++){
+    digitalWrite(LED2,LOW);
+    digitalWrite(LED4,LOW);
+    digitalWrite(LED1,HIGH);
+    digitalWrite(LED3,HIGH);
+    delay(d);
+
+    digitalWrite(LED2,HIGH);
+    digitalWrite(LED4,HIGH);
+    digitalWrite(LED1,LOW);
+    digitalWrite(LED3,LOW);
+    delay(d);
+    
+  }
+  off();
+}
+
+void off(){
+  digitalWrite(LED1,LOW);
+  digitalWrite(LED2,LOW);
+  digitalWrite(LED3,LOW);
+  digitalWrite(LED4,LOW);
 }

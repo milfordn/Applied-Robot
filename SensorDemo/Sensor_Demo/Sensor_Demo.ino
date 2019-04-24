@@ -12,6 +12,7 @@ int encoder_in = 4;
 
 int power = 200;
 long timeForSpeed = 0;
+int ticks = 0;
 
 void setup() {
   // put your setup code here, to run once:
@@ -63,13 +64,17 @@ bool encoder_last = false;
 void loop() {
   // put your main code here, to run repeatedly:
   if(digitalRead(encoder_in) != encoder_last){
-    Serial.print("Encoder Moved ");
+    ticks++;
+    Serial.print("Encoder Moved  at ");
     encoder_last = !encoder_last;
     long current = micros();
     long microDifference = current - timeForSpeed;
     timeForSpeed = current;
     double measuredSpeed = 45. / (microDifference / 1000000.);
-    Serial.println(measuredSpeed);
+    Serial.print(measuredSpeed);
+    Serial.print(" Degrees per second, ");
+    Serial.print(ticks * 45);
+    Serial.println(" Degrees Total ");
   }
   //demoOne();
 }

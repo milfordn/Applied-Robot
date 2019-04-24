@@ -1,0 +1,22 @@
+html{
+	background-color:rgb(243,243,243);
+}
+*{
+	font-family: Helvetica;
+}
+body{
+	margin: 0 auto;
+	margin-top: 5px;
+	padding:10px;
+	font-size: 20px;
+	text-align: center;
+}
+button{
+	display: block;
+	margin: 0 auto;
+}
+textarea{
+	padding:5px;
+	border-radius: 3px;
+	margin: 0 auto;
+}

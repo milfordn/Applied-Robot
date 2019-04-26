@@ -1,3 +1,5 @@
+#include <FastGPIO.h>
+
 //connect motor controller pins to Arduino digital pins
 // motor one
 const int enA = 10;
@@ -15,41 +17,39 @@ int power = 200;
 long encoderTime = 0;
 long encoderTimeLast = 0;
 int ticks = 0;
-bool update = false;
-byte dir = 0;
+bool encoderUpdate = false;
+int8_t dir = 0;
 
 void setup() {
   // put your setup code here, to run once:
  // set all the motor control pins to outputs
   Serial.begin(9600);
+  Serial.print("Starting!");
   pinMode(enA, OUTPUT);
   pinMode(in1, OUTPUT);
   pinMode(in2, OUTPUT);
   pinMode(encoder1a, INPUT);
+  pinMode(encoder1b, INPUT);
+  digitalWrite(encoder1b, 0);
   attachInterrupt(digitalPinToInterrupt(encoder1a), updateMeasurements, CHANGE);
-  encoderTime = encoderTimeLast = micros();
+  encoderTime = micros();
+  encoderTimeLast = encoderTime - 1000;
 }
 
 void updateMeasurements(){
   encoderTimeLast = encoderTime;
   encoderTime = micros();
-  if(digitalRead(encoder1b)){
-    ticks++; 
-    dir = 1;
-  }
-  else{
-    ticks--;
-    dir = -1;
-  }
-  update = true;
+  dir = (FastGPIO::Pin<encoder1b>::isInputHigh() << 1) - 1;
+  ticks += dir;
+  encoderUpdate = true;
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
-  if(update){
-    update = false;
+  if(encoderUpdate){
+    encoderUpdate = false;
     Serial.print("Encoder Moved  at ");
-    double measuredSpeed = 45. / ((encoderTime - encoderTimeLast) / 1000000.) * dir;
+    float measuredSpeed = dir * 45. / ((encoderTime - encoderTimeLast) / 1000000.);
     Serial.print(measuredSpeed);
     Serial.print(" Degrees per second, ");
     Serial.print(ticks * 45);

@@ -1,4 +1,5 @@
 #include <L298N.h>
+#include "Mapping.h"
 
 #define EN1 3
 #define EN2 4
@@ -7,15 +8,9 @@
 #define IN2_1 10
 #define IN2_2 11
 
-#define LED1 10
-#define LED2 9
-#define LED3 8
-#define LED4 7
-
 char action;
 bool moving = false;
 bool obstacle = false;
-
 
 void setup() {
   // put your setup code here, to run once:
@@ -23,10 +18,10 @@ void setup() {
   Serial.begin(115200);
   Serial.println("Connected");
 
-  pinMode(LED1,OUTPUT);
-  pinMode(LED2,OUTPUT);
-  pinMode(LED3,OUTPUT);
-  pinMode(LED4,OUTPUT);
+  pinMode(PIN_DEBUG_LED_1, OUTPUT);
+  pinMode(PIN_DEBUG_LED_2, OUTPUT);
+  pinMode(PIN_DEBUG_LED_3, OUTPUT);
+  pinMode(PIN_DEBUG_LED_4, OUTPUT);
 }
 
 void loop() {
@@ -94,23 +89,23 @@ void loop() {
 
 void move(){
   if(moving){ //IF WE SHOULD BE MOVING
-    digitalWrite(LED1,HIGH);
+    digitalWrite(PIN_DEBUG_LED_1,HIGH);
     if(!obstacle){ //There is no obstacle
-      digitalWrite(LED3,LOW);
-      digitalWrite(LED4,HIGH);
+      digitalWrite(PIN_DEBUG_LED_3,LOW);
+      digitalWrite(PIN_DEBUG_LED_4,HIGH);
       
       //MOTOR LOGIC HERE
       
     } else { //There is an obstacle
-      digitalWrite(LED3,HIGH);
-      digitalWrite(LED4,LOW);
+      digitalWrite(PIN_DEBUG_LED_3,HIGH);
+      digitalWrite(PIN_DEBUG_LED_4,LOW);
 
       //STOP MOTORS OR SWERVE
     }
   } else{ //IF NOT
-    digitalWrite(LED1,LOW);
-    digitalWrite(LED3,LOW);
-    digitalWrite(LED4,LOW);
+    digitalWrite(PIN_DEBUG_LED_1,LOW);
+    digitalWrite(PIN_DEBUG_LED_3,LOW);
+    digitalWrite(PIN_DEBUG_LED_4,LOW);
 
     //Turn off motors
   }
@@ -119,65 +114,65 @@ void move(){
 void ledline(int n){
   int d = 50;
   for(int i=0; i<n; i++){
-    digitalWrite(LED1,HIGH);
+    digitalWrite(PIN_DEBUG_LED_1,HIGH);
     delay(d);
-    digitalWrite(LED2,HIGH);
+    digitalWrite(PIN_DEBUG_LED_2,HIGH);
     delay(d);
-    digitalWrite(LED3,HIGH);
-    digitalWrite(LED1,LOW);
+    digitalWrite(PIN_DEBUG_LED_3,HIGH);
+    digitalWrite(PIN_DEBUG_LED_1,LOW);
     delay(d);
-    digitalWrite(LED4,HIGH);
-    digitalWrite(LED2,LOW);
+    digitalWrite(PIN_DEBUG_LED_4,HIGH);
+    digitalWrite(PIN_DEBUG_LED_2,LOW);
     delay(d);
-    digitalWrite(LED3,LOW);
+    digitalWrite(PIN_DEBUG_LED_3,LOW);
     delay(d);
-    digitalWrite(LED4,LOW);
+    digitalWrite(PIN_DEBUG_LED_4,LOW);
   }
 }
 
 void ledbounce(int n){
   int d = 50;
   for(int i=0; i<n; i++){
-    digitalWrite(LED1,HIGH);
+    digitalWrite(PIN_DEBUG_LED_1,HIGH);
     delay(d);
-    digitalWrite(LED2,HIGH);
+    digitalWrite(PIN_DEBUG_LED_2,HIGH);
     delay(d);
-    digitalWrite(LED3,HIGH);
-    digitalWrite(LED1,LOW);
+    digitalWrite(PIN_DEBUG_LED_3,HIGH);
+    digitalWrite(PIN_DEBUG_LED_1,LOW);
     delay(d);
-    digitalWrite(LED4,HIGH);
-    digitalWrite(LED2,LOW);
+    digitalWrite(PIN_DEBUG_LED_4,HIGH);
+    digitalWrite(PIN_DEBUG_LED_2,LOW);
     delay(d);
-    digitalWrite(LED3,LOW);
+    digitalWrite(PIN_DEBUG_LED_3,LOW);
     delay(d);
     
-    digitalWrite(LED3,HIGH);
+    digitalWrite(PIN_DEBUG_LED_3,HIGH);
     delay(d);
-    digitalWrite(LED2,HIGH);
-    digitalWrite(LED4,LOW);
+    digitalWrite(PIN_DEBUG_LED_2,HIGH);
+    digitalWrite(PIN_DEBUG_LED_4,LOW);
     delay(d);
-    digitalWrite(LED1,HIGH);
-    digitalWrite(LED3,LOW);
+    digitalWrite(PIN_DEBUG_LED_1,HIGH);
+    digitalWrite(PIN_DEBUG_LED_3,LOW);
     delay(d);
-    digitalWrite(LED2,LOW);
+    digitalWrite(PIN_DEBUG_LED_2,LOW);
     delay(d);
-    digitalWrite(LED1,LOW);
+    digitalWrite(PIN_DEBUG_LED_1,LOW);
   }
 }
 
 void altflicker(int n){
   int d = 250;
   for(int i=0;i<n;i++){
-    digitalWrite(LED2,LOW);
-    digitalWrite(LED4,LOW);
-    digitalWrite(LED1,HIGH);
-    digitalWrite(LED3,HIGH);
+    digitalWrite(PIN_DEBUG_LED_2,LOW);
+    digitalWrite(PIN_DEBUG_LED_4,LOW);
+    digitalWrite(PIN_DEBUG_LED_1,HIGH);
+    digitalWrite(PIN_DEBUG_LED_3,HIGH);
     delay(d);
 
-    digitalWrite(LED2,HIGH);
-    digitalWrite(LED4,HIGH);
-    digitalWrite(LED1,LOW);
-    digitalWrite(LED3,LOW);
+    digitalWrite(PIN_DEBUG_LED_2,HIGH);
+    digitalWrite(PIN_DEBUG_LED_4,HIGH);
+    digitalWrite(PIN_DEBUG_LED_1,LOW);
+    digitalWrite(PIN_DEBUG_LED_3,LOW);
     delay(d);
     
   }
@@ -185,8 +180,8 @@ void altflicker(int n){
 }
 
 void off(){
-  digitalWrite(LED1,LOW);
-  digitalWrite(LED2,LOW);
-  digitalWrite(LED3,LOW);
-  digitalWrite(LED4,LOW);
+  digitalWrite(PIN_DEBUG_LED_1,LOW);
+  digitalWrite(PIN_DEBUG_LED_2,LOW);
+  digitalWrite(PIN_DEBUG_LED_3,LOW);
+  digitalWrite(PIN_DEBUG_LED_4,LOW);
 }

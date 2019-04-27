@@ -48,7 +48,7 @@ void updateMeasurements(){
   ticks += encoderDir;
   encoderUpdate = true;
   if(ticks < -32){
-//    analogWrite(enA, 0);
+    analogWrite(enA, 0);
     digitalWrite(in1, HIGH);
     digitalWrite(in2, LOW);
   }

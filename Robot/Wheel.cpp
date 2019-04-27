@@ -3,7 +3,7 @@
 Wheel * Wheel::registeredLeft = NULL;
 Wheel * Wheel::registeredRight = NULL;
 
-Wheel::Wheel(int en, int in1, int in2, int enc_a, int enc_b){
+Wheel::Wheel(byte en, byte in1, byte in2, byte enc_a, byte enc_b){
     pin_en = en;
     pin_in1 = in1;
     pin_in2 = in2;
@@ -42,6 +42,15 @@ void Wheel::drive(short vel){
       digitalWrite(pin_in2, HIGH);
     }
     analogWrite(pin_en,vel);
+}
+
+float Wheel::getSpeed(){
+    float angularVel = encoderDir * (PI * (2 / TICKS_PER_REV)) / ((encoderTime - encoderTimeLast) / 1000000.); //in degrees
+    return angularVel * WHEEL_DIAMETER / 2;
+}
+
+float Wheel::getDistance(){
+    return encoderTicks * (PI * (2 / TICKS_PER_REV)) * WHEEL_DIAMETER / 2;
 }
 
 void Wheel::generalISR(Wheel * wheel){

@@ -6,7 +6,7 @@ PIDF::PIDF(float p, float i, float d, float f, float highLimit, float lowLimit){
     kd = d;
     kf = f;
     lower = lowLimit;
-    higher = highLimit;
+    upper = highLimit;
 }
 
 float PIDF::get(float dt, float set, float get, float d){
@@ -15,16 +15,17 @@ float PIDF::get(float dt, float set, float get, float d){
     accumulatedError += error  * dt;
     float output = error * kp + accumulatedError * ki + set * kf;
 
-    if(!isnan(upper) && output > upper){
-        accumulatedError = (upper - (error * kp + set * kf)) / ki; //back-calculate what error should be at this point
+    if(upper != 0 && output > upper){
+        //back-calculate what error should be at this point
+        accumulatedError = (upper - (error * kp + set * kf)) / ki; 
         if(accumulatedError < 0) accumulatedError = 0;
     }
     if(!isnan(lower) && output < lower){
-        integral = (lower - (error * kp + set * kf)) / ki;
+        accumulatedError = (lower - (error * kp + set * kf)) / ki;
         if(accumulatedError < 0) accumulatedError = 0;
     }
 
-    return error * kp + accumulatedError * ki + d * kd;
+    return error * kp + accumulatedError * ki + d * kd + set * kf;
 }
     
     

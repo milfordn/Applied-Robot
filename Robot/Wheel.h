@@ -27,6 +27,7 @@ public:
     Wheel(byte en, byte in1, byte in2, byte enc_a, byte enc_b);
     ~Wheel();
     void drive(short vel);    //vel is within [-255..255]
+    void brake();
     float getSpeed();
     float getDistance();
 };

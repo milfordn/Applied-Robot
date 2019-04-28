@@ -44,6 +44,12 @@ void Wheel::drive(short vel){
     analogWrite(pin_en,vel);
 }
 
+void Wheel::brake(){
+    analogWrite(pin_en, 255);
+    digitalWrite(pin_in1, HIGH);
+    digitalWrite(pin_in2, HIGH);
+}
+
 float Wheel::getSpeed(){
     float angularVel = encoderDir * (PI * (2 / TICKS_PER_REV)) / ((encoderTime - encoderTimeLast) / 1000000.); //in degrees
     return angularVel * WHEEL_DIAMETER / 2;

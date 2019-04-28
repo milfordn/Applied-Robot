@@ -51,7 +51,11 @@ void Wheel::brake(){
 }
 
 float Wheel::getSpeed(){
-    float angularVel = encoderDir * (PI * (2 / TICKS_PER_REV)) / ((encoderTime - encoderTimeLast) / 1000000.); //in degrees
+    encoderUpdated = false;
+    float angularVel;
+    do {
+        angularVel = encoderDir * (PI * (2 / TICKS_PER_REV)) / ((encoderTime - encoderTimeLast) / 1000000.); //in degrees
+    } while(encoderUpdated); //re-calculate if an interrupt happened during the calculations
     return angularVel * WHEEL_DIAMETER / 2;
 }
 
@@ -70,6 +74,7 @@ void Wheel::generalISR(Wheel * wheel){
     //  0   0   -1
     wheel->encoderDir = (digitalRead(wheel->pin_enc_a) ^ digitalRead(wheel->pin_enc_b)) * 2 - 1;
     wheel->encoderTicks += wheel->encoderDir;
+    wheel->encoderUpdated = true;
 }
 
 void Wheel::leftEncoderISR(){

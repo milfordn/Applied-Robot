@@ -11,9 +11,10 @@ private:
     byte pin_en, pin_in1, pin_in2;
     byte pin_enc_a, pin_enc_b;
 
-    long encoderTime, encoderTimeLast;
-    short encoderTicks = 0;
-    byte encoderDir = 0;
+    volatile long encoderTime, encoderTimeLast;
+    volatile int8_t encoderTicks = 0;
+    volatile byte encoderDir = 0;
+    volatile bool encoderUpdated;
 
     void detachEncoderISR();
 

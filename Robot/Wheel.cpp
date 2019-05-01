@@ -51,7 +51,7 @@ void Wheel::brake(){
 }
 
 float Wheel::getSpeed(){
-    encoderUpdated = false;
+    bool encoderUpdated = false;
     float angularVel;
     do {
         angularVel = encoderDir * (PI * (2 / TICKS_PER_REV)) / ((encoderTime - encoderTimeLast) / 1000000.); //in degrees

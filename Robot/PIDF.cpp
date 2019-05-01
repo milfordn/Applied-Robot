@@ -16,7 +16,8 @@ float PIDF::get(float dt, float set, float get, float d){
     float output = error * kp + accumulatedError * ki + set * kf;
 
     if(upper != 0 && output > upper){
-        //back-calculate what error should be at this point
+        //back-calculate what accumulated error should be 
+        //when the pid loop is maxed out
         accumulatedError = (upper - (error * kp + set * kf)) / ki; 
         if(accumulatedError < 0) accumulatedError = 0;
     }

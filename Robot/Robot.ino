@@ -28,85 +28,75 @@ void setup() {
   Serial.begin(115200);
   Serial.println("Connected");
 
-  pinMode(PIN_DEBUG_LED_1, OUTPUT);
-  pinMode(PIN_DEBUG_LED_2, OUTPUT);
-  pinMode(PIN_DEBUG_LED_3, OUTPUT);
-  pinMode(PIN_DEBUG_LED_4, OUTPUT);
-
   Wheel::registerLeftRight(&leftWheel, &rightWheel);
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
   action=0;
+   moving = true;
 
-  if(Serial.available() > 0){
-    action = Serial.read();
-    //Serial.println(action);
-  }
+ if(Serial.available() > 0){
+//   action = Serial.read();
+   //Serial.println(action);
+ }
 
-  switch(action){
-    //Moving start/stop
-    case 'm':
-      Serial.println("Moving...");
-      moving = true;
-      
-      break;
-    case 'n':
-      Serial.println("Stopping...");
-      moving = false;
-      
-      break;
+ switch(action){
+   //Moving start/stop
+   case 'm':
+     Serial.println("Moving...");
+     moving = true;
+     
+     break;
+   case 'n':
+     Serial.println("Stopping...");
+     moving = false;
+     
+     break;
 
-    //Obstacle exists/clear
-    case 'o':
-      if(moving)
-        Serial.println("Obstacle encountered, pause.");
-      obstacle = true;
-      
-      break;
-    case 'c':
-      if(moving)
-        Serial.println("Clear to go!");
-      obstacle = false;
-      
-      break;
+   //Obstacle exists/clear
+   case 'o':
+     if(moving)
+       Serial.println("Obstacle encountered, pause.");
+     obstacle = true;
+     
+     break;
+   case 'c':
+     if(moving)
+       Serial.println("Clear to go!");
+     obstacle = false;
+     
+     break;
 
 
-    case 'i':
-      int integer = Serial.parseInt();
-      Serial.print("Got integer: ");
-      Serial.println(integer);
-  
-      break;
-  }
+   case 'i':
+     int integer = Serial.parseInt();
+     Serial.print("Got integer: ");
+     Serial.println(integer);
+ 
+     break;
+ }
 
   move();
 }
 
 void move(){
   if(moving){ //IF WE SHOULD BE MOVING
-    digitalWrite(PIN_DEBUG_LED_1,HIGH);
-    if(!obstacle){ //There is no obstacle
-      digitalWrite(PIN_DEBUG_LED_3,LOW);
-      digitalWrite(PIN_DEBUG_LED_4,HIGH);
-      
+//    Serial.println("Driving");
+    if(!obstacle){ //There is no obstacle 
       //MOTOR LOGIC HERE
-      leftWheel.drive(-100);
+      leftWheel.drive(255);
+      rightWheel.drive(255);
     } else { //There is an obstacle
-      digitalWrite(PIN_DEBUG_LED_3,HIGH);
-      digitalWrite(PIN_DEBUG_LED_4,LOW);
-
       //STOP MOTORS OR SWERVE
-      leftWheel.drive(100);
+      leftWheel.drive(-100);
+      rightWheel.drive(0);
     }
   } else{ //IF NOT
-    digitalWrite(PIN_DEBUG_LED_1,LOW);
-    digitalWrite(PIN_DEBUG_LED_3,LOW);
-    digitalWrite(PIN_DEBUG_LED_4,LOW);
-    
     //Turn off motors
-    leftWheel.drive(0);
+//    Serial.println("Braking");
+    leftWheel.brake();
+    rightWheel.brake();
   }
 }
 

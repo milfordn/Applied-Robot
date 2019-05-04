@@ -46,8 +46,33 @@ void loop() {
  }
 
  switch(action){
+
+   //joystick
+  case 'm':
+    int lmotor = 0;
+    int rmotor = 0;
+    bool failure = false;
+    for(int i=0;i<2;i++){
+      char validate = Serial.read();
+      if(validate == 'l'){
+        lmotor = Serial.parseInt();
+      } else if (validate =='r'){
+        rmotor = Serial.parseInt();
+      } else{
+        failure=true;
+      }
+    }
+    if(!failure){
+      leftWheel.drive(lmotor);
+      rightWheel.drive(rmotor);
+    }
+    else{
+      Serial.println("Malformed command for movement!");
+    }
+    break;
+
    //Moving start/stop
-   case 'm':
+   /* case 'm':
      Serial.println("Moving...");
      moving = true;
      
@@ -70,7 +95,7 @@ void loop() {
        Serial.println("Clear to go!");
      obstacle = false;
      
-     break;
+     break; */
 
   case 'l':
     loadingServo.write(loadingServo.read() + 90);
@@ -87,9 +112,9 @@ void loop() {
      break;
  }
 
-  move();
+  //move();
 }
-
+/* 
 void move(){
   if(moving){ //IF WE SHOULD BE MOVING
 //    Serial.println("Driving");
@@ -109,78 +134,4 @@ void move(){
     rightWheel.brake();
   }
 }
-
-void ledline(int n){
-  int d = 50;
-  for(int i=0; i<n; i++){
-    digitalWrite(PIN_DEBUG_LED_1,HIGH);
-    delay(d);
-    digitalWrite(PIN_DEBUG_LED_2,HIGH);
-    delay(d);
-    digitalWrite(PIN_DEBUG_LED_3,HIGH);
-    digitalWrite(PIN_DEBUG_LED_1,LOW);
-    delay(d);
-    digitalWrite(PIN_DEBUG_LED_4,HIGH);
-    digitalWrite(PIN_DEBUG_LED_2,LOW);
-    delay(d);
-    digitalWrite(PIN_DEBUG_LED_3,LOW);
-    delay(d);
-    digitalWrite(PIN_DEBUG_LED_4,LOW);
-  }
-}
-
-void ledbounce(int n){
-  int d = 50;
-  for(int i=0; i<n; i++){
-    digitalWrite(PIN_DEBUG_LED_1,HIGH);
-    delay(d);
-    digitalWrite(PIN_DEBUG_LED_2,HIGH);
-    delay(d);
-    digitalWrite(PIN_DEBUG_LED_3,HIGH);
-    digitalWrite(PIN_DEBUG_LED_1,LOW);
-    delay(d);
-    digitalWrite(PIN_DEBUG_LED_4,HIGH);
-    digitalWrite(PIN_DEBUG_LED_2,LOW);
-    delay(d);
-    digitalWrite(PIN_DEBUG_LED_3,LOW);
-    delay(d);
-    
-    digitalWrite(PIN_DEBUG_LED_3,HIGH);
-    delay(d);
-    digitalWrite(PIN_DEBUG_LED_2,HIGH);
-    digitalWrite(PIN_DEBUG_LED_4,LOW);
-    delay(d);
-    digitalWrite(PIN_DEBUG_LED_1,HIGH);
-    digitalWrite(PIN_DEBUG_LED_3,LOW);
-    delay(d);
-    digitalWrite(PIN_DEBUG_LED_2,LOW);
-    delay(d);
-    digitalWrite(PIN_DEBUG_LED_1,LOW);
-  }
-}
-
-void altflicker(int n){
-  int d = 250;
-  for(int i=0;i<n;i++){
-    digitalWrite(PIN_DEBUG_LED_2,LOW);
-    digitalWrite(PIN_DEBUG_LED_4,LOW);
-    digitalWrite(PIN_DEBUG_LED_1,HIGH);
-    digitalWrite(PIN_DEBUG_LED_3,HIGH);
-    delay(d);
-
-    digitalWrite(PIN_DEBUG_LED_2,HIGH);
-    digitalWrite(PIN_DEBUG_LED_4,HIGH);
-    digitalWrite(PIN_DEBUG_LED_1,LOW);
-    digitalWrite(PIN_DEBUG_LED_3,LOW);
-    delay(d);
-    
-  }
-  off();
-}
-
-void off(){
-  digitalWrite(PIN_DEBUG_LED_1,LOW);
-  digitalWrite(PIN_DEBUG_LED_2,LOW);
-  digitalWrite(PIN_DEBUG_LED_3,LOW);
-  digitalWrite(PIN_DEBUG_LED_4,LOW);
-}
+ */

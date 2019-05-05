@@ -13,6 +13,8 @@
 #define PIN_ENCODER_RIGHT_A 0
 #define PIN_ENCODER_RIGHT_B 0
 
+#define PIN_SERVO_LOAD 6
+
 #define PIN_DEBUG_LED_1 10
 #define PIN_DEBUG_LED_2 9
 #define PIN_DEBUG_LED_3 8

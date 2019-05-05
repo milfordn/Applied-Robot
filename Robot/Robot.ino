@@ -1,10 +1,13 @@
 #include "Mapping.h"
 #include "Wheel.h"
 #include "PIDF.h"
+#include <Servo.h>
 
 char action;
 bool moving = false;
 bool obstacle = false;
+
+Servo loadingServo;
 
 Wheel leftWheel(
   PIN_DRIVE_LEFT_EN, 
@@ -27,6 +30,7 @@ void setup() {
 
   Serial.begin(115200);
   Serial.println("Connected");
+  loadingServo.attach(PIN_SERVO_LOAD);
 
   Wheel::registerLeftRight(&leftWheel, &rightWheel);
 }
@@ -37,8 +41,8 @@ void loop() {
    moving = true;
 
  if(Serial.available() > 0){
-//   action = Serial.read();
-   //Serial.println(action);
+   action = Serial.read();
+   Serial.println(action);
  }
 
  switch(action){
@@ -68,12 +72,18 @@ void loop() {
      
      break;
 
+  case 'l':
+    loadingServo.write(loadingServo.read() + 90);
+    break;
+
+  case 'u':
+    loadingServo.write(0);
+    break;
 
    case 'i':
-     int integer = Serial.parseInt();
+     int in = Serial.parseInt();
      Serial.print("Got integer: ");
-     Serial.println(integer);
- 
+     Serial.println(in);
      break;
  }
 

@@ -5,10 +5,12 @@ import math
 
 points = [
     (0, 0),
-    (0.3, 0.9),
-    (0.5, 1),
-    (0.7, 1.1),
-    (1, 2)
+    # (0.01, 1),
+    (0.3, 4),
+    (0.5, 5),
+    (0.7, 6),
+    # (0.99, 9),
+    (1, 10)
 ]
 
 def spline(coords):
@@ -53,30 +55,50 @@ def value(spline, param):
     (a, b, c, d) = spline
     return a + (b * param) + (c * param * param) + (d * param * param * param)
 
-def heading(spline, param):
+def derivative(spline, param):
     (_, b, c, d) = spline
-    return math.atan(b + (2 * c * param) + (3 * d * param * param))
+    return b + (2 * c * param) + (3 * d * param * param)
+
+def heading(spline, param):
+    return math.atan(derivative(spline, param))
 
 def dHeading(spline, param):
-    (_, b, c, d) = spline
-    slope = b + (2 * c * param) + (3 * d * param * param)
+    (_, _, c, d) = spline
+    slope = derivative(spline, param)
     return ((2 * c) + (6 * d * param)) / (slope * slope + 1)
 
+def maxVelocity(spline, param):
+    # max linear velocity will be a function of the
+    # physical robot constraints and the angular velocity
+    angularVel = dHeading(spline, param) #radians per second
+    maxWheelVelocity = 5 #feet per second
+    wheelWidth = 1 #feet
+    requiredSpeedDifferential = abs(wheelWidth * angularVel) #radians/second * feet = feet / second
+    return maxWheelVelocity - (requiredSpeedDifferential / 2)
+    
 def rectify(splines, points, resolution):
     t = 0
     splineIndex = 0
     pointIndex = 0
+    distanceTraveled = 0
     values = []
     while(t < points[-1][0]):
-        # print(splineIndex, pointIndex, t)
         spline = splines[splineIndex]
         param = t - points[pointIndex][0]
+
+        slope = derivative(spline, param) * resolution
+        distanceStep = math.sqrt(resolution * resolution + slope * slope)
+
+        # TODO: Calculate this better
+        # linearVel = distanceStep / 0.1
 
         position = value(spline, param)
         angle = heading(spline, param)
         angleVel = dHeading(spline, param)
+        maxVel = maxVelocity(spline, param)
 
-        values.append((position, angle, angleVel))
+        values.append((position, angle, angleVel, distanceTraveled))
+        distanceTraveled += distanceStep
         t += resolution
         if t >= points[pointIndex+1][0]:
             splineIndex += 1
@@ -84,11 +106,10 @@ def rectify(splines, points, resolution):
 
     return values
 
-
-
 splines = spline(points)
 print(splines)
 rectified = rectify(splines, points, 0.01)
 
 mpl.plot(rectified)
+mpl.legend(["position", "heading", "angular velocity", "Total distance traveled"])
 mpl.show()

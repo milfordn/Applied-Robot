@@ -42,62 +42,28 @@ void loop() {
 
  if(Serial.available() > 0){
    action = Serial.read();
-   Serial.println(action);
  }
 
+int lmotor,rmotor,index;
+bool failure;
+char validate;
  switch(action){
 
    //joystick
-  case 'm':
-    int lmotor = 0;
-    int rmotor = 0;
-    bool failure = false;
-    for(int i=0;i<2;i++){
-      char validate = Serial.read();
-      if(validate == 'l'){
-        lmotor = Serial.parseInt();
-      } else if (validate =='r'){
-        rmotor = Serial.parseInt();
-      } else{
-        failure=true;
-      }
-    }
-    if(!failure){
-      leftWheel.drive(lmotor);
-      rightWheel.drive(rmotor);
-    }
-    else{
-      Serial.println("Malformed command for movement!");
-    }
+  case 'L':
+    lmotor = Serial.parseInt();
+    Serial.println(lmotor);
+    leftWheel.drive(lmotor);
     break;
 
-   //Moving start/stop
-   /* case 'm':
-     Serial.println("Moving...");
-     moving = true;
-     
-     break;
-   case 'n':
-     Serial.println("Stopping...");
-     moving = false;
-     
-     break;
-
-   //Obstacle exists/clear
-   case 'o':
-     if(moving)
-       Serial.println("Obstacle encountered, pause.");
-     obstacle = true;
-     
-     break;
-   case 'c':
-     if(moving)
-       Serial.println("Clear to go!");
-     obstacle = false;
-     
-     break; */
+  case 'R':
+    rmotor = Serial.parseInt();
+    Serial.println(rmotor);
+    rightWheel.drive(rmotor);
+    break;
 
   case 'l':
+    Serial.println("Got L");
     loadingServo.write(loadingServo.read() + 90);
     break;
 
@@ -106,9 +72,7 @@ void loop() {
     break;
 
    case 'i':
-     int in = Serial.parseInt();
-     Serial.print("Got integer: ");
-     Serial.println(in);
+     Serial.println(">i<");
      break;
  }
 

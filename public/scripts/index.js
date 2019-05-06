@@ -31,7 +31,7 @@ setInterval(function(){
 
 function sendMotorSignal(left,right){
 	//console.log(`L:${left}, R:${right}`);
-	var str = `ml${left}r${right}`;
+	var str = `L${left}R${right}`;
 	socket.emit('binaryaction',str)
 }
 

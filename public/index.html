@@ -12,11 +12,18 @@
 
     <main>
         <div id='container'></div>
-        <button class="actionbutton" id="m">Start Moving</button>
-    	<button class="actionbutton" id="n">Stop Moving</button>
-    	<button class="actionbutton" id="a">Action A</button>
-    	<button class="actionbutton" id="s">Action S</button>
-    	<button class="actionbutton" id="d">Action D</button>
+        <ul id='status'>
+            <li id='Arm Loaded'></li>
+            <li id='Arm Back'></li>
+            <li id='Arm Latched'></li>
+            <li id='Arm Pully Released'></li>
+        </ul>
+    	<button class="actionbutton" id="l">Load Bean Bag</button>
+    	<button class="actionbutton" id="u">Reset Hopper</button>
+    	<button class="actionbutton" id="p">Pull Arm Back</button>
+    	<button class="actionbutton" id="k">Latch Arm</button>
+    	<button class="actionbutton" id="r">Release Pulley</button>
+    	<button class="actionbutton" id="s">Release Latch</button>
         <hr>
     	<textarea rows="3" cols="50" id="logmessages"></textarea>
     </main>

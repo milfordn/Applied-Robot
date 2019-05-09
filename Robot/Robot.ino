@@ -47,21 +47,35 @@ void loop() {
 int lmotor,rmotor,index;
 bool failure;
 char validate;
+int mvalsread = 0;
+unsigned long before,after;
  switch(action){
 
    //joystick
-  case 'L':
-    lmotor = Serial.parseInt();
-    Serial.println(lmotor);
-    leftWheel.drive(lmotor);
+  case 'M':
+    while(mvalsread<2){
+      validate = Serial.read();
+      if(validate=='L'){
+        lmotor = Serial.parseInt();
+        Serial.print("Left Motor: ");
+        Serial.println(lmotor);
+        mvalsread++;
+      } 
+      else if(validate == 'R'){
+        rmotor = Serial.parseInt();
+        Serial.print("Right Motor: ");
+        Serial.println(rmotor);     
+        mvalsread++;  
+      }
+    }
+    if(mvalsread == 2){
+      rightWheel.drive(rmotor);
+      leftWheel.drive(lmotor);
+    } else {
+      Serial.println("Malformed String for Motor!");
+    }
     break;
-
-  case 'R':
-    rmotor = Serial.parseInt();
-    Serial.println(rmotor);
-    rightWheel.drive(rmotor);
-    break;
-
+    
   case 'l':
     Serial.println("Moving servo");
     loadingServo.write(loadingServo.read() + 90);

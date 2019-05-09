@@ -26,6 +26,15 @@ setInterval(function(){
 }, 1/30 * 1000);
 
 
+//When making a log message for this make sure to include one of the status_msgs in the string and a 0 for false, 1 for true
+function checkStatus(msg){
+	status_msgs = ["armloaded","armback","armlatched","armpulleyrelease"]
+	status_msgs.forEach(function(smsg){
+		if(msg.indexOf(smsg)!=-1){
+			document.getElementById(smsg).style.color = msg.indexOf("0")!=-1 ? "red" : "blue";
+		}
+	});
+}
 
 //------
 
@@ -42,6 +51,7 @@ socket.on('logmessage',function(message){
 	msgbox.val(msgbox.val() + message);
 	if(msgbox.length)
 		msgbox.scrollTop(msgbox[0].scrollHeight - msgbox.height());
+	checkStatus(message);
 });
 socket.on('ultrasonicstatus',function(sensordata){
 	console.log(sensordata);

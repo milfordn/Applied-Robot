@@ -63,16 +63,29 @@ char validate;
     break;
 
   case 'l':
-    Serial.println("Got L");
+    Serial.println("Moving servo");
     loadingServo.write(loadingServo.read() + 90);
     break;
 
   case 'u':
+    Serial.println("Resetting servo");
     loadingServo.write(0);
     break;
 
-   case 'i':
-     Serial.println(">i<");
+   case 'p':
+     Serial.println("Pulling arm back");
+     break;
+
+   case 'k':
+     Serial.println("Latching arm");
+     break;
+
+   case 'r':
+     Serial.println("Releasing Pulley");
+     break;
+
+   case 's':
+     Serial.println("Releasing Latch");
      break;
  }
 

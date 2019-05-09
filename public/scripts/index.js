@@ -11,7 +11,7 @@ var joystick	= new VirtualJoystick({
     mouseSupport	: true,
     deadzoneX : 20,
     deadzoneY : 20,
-    motorAmp : 2,
+    motorAmp : 3,
 });
 var lastm1 = 0;
 var lastm2 = 0;
@@ -21,9 +21,9 @@ setInterval(function(){
 	if(m1!=lastm1 || m2!=lastm2){
 		lastm1=m1;
 		lastm2=m2;
-		sendMotorSignal(lastm1,lastm2);
+		sendMotorSignal(Math.floor(lastm1),Math.floor(-lastm2));
 	} 
-}, 1/30 * 1000);
+}, 1/20 * 1000);
 
 
 //When making a log message for this make sure to include one of the status_msgs in the string and a 0 for false, 1 for true
@@ -40,7 +40,7 @@ function checkStatus(msg){
 
 function sendMotorSignal(left,right){
 	//console.log(`L:${left}, R:${right}`);
-	var str = `L${left}R${right}`;
+	var str = `ML${left}R${right}`;
 	socket.emit('binaryaction',str)
 }
 

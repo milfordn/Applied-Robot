@@ -8,6 +8,8 @@ MotorController::MotorController(byte en, byte in1, byte in2){
     pinMode(pin_en, OUTPUT);
     pinMode(pin_in1, OUTPUT);
     pinMode(pin_in2, OUTPUT);
+    
+    analogWrite(pin_en, 0);
 }
 
 void MotorController::drive(short vel){
@@ -23,7 +25,7 @@ void MotorController::drive(short vel){
     analogWrite(pin_en, (byte)vel);
 }
 
-void brake(){
+void MotorController::brake(){
     analogWrite(pin_en, 255);
     digitalWrite(pin_in1, HIGH);
     digitalWrite(pin_in2, HIGH);

@@ -5,10 +5,10 @@
 #define TICKS_PER_REV 8
 
 #include <Arduino.h>
+#include "MotorController.h"
 
-class Wheel{
+class Wheel : public MotorController{
 private:
-    byte pin_en, pin_in1, pin_in2;
     byte pin_enc_a, pin_enc_b;
 
     volatile long encoderTime, encoderTimeLast;

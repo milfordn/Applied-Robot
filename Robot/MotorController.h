@@ -1,6 +1,8 @@
 #ifndef MOTOR_CONTROLLER_H
 #define MOTOR_CONTROLLER_H
 
+#include <Arduino.h>
+
 class MotorController{
 private:
     byte pin_en, pin_in1, pin_in2;

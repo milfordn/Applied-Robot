@@ -42,54 +42,70 @@ void loop() {
 
  if(Serial.available() > 0){
    action = Serial.read();
-   Serial.println(action);
  }
 
+int lmotor,rmotor,index;
+bool failure;
+char validate;
+int mvalsread = 0;
+unsigned long before,after;
  switch(action){
-   //Moving start/stop
-   case 'm':
-     Serial.println("Moving...");
-     moving = true;
-     
-     break;
-   case 'n':
-     Serial.println("Stopping...");
-     moving = false;
-     
-     break;
 
-   //Obstacle exists/clear
-   case 'o':
-     if(moving)
-       Serial.println("Obstacle encountered, pause.");
-     obstacle = true;
-     
-     break;
-   case 'c':
-     if(moving)
-       Serial.println("Clear to go!");
-     obstacle = false;
-     
-     break;
-
+   //joystick
+  case 'M':
+    while(mvalsread<2){
+      validate = Serial.read();
+      if(validate=='L'){
+        lmotor = Serial.parseInt();
+        Serial.print("Left Motor: ");
+        Serial.println(lmotor);
+        mvalsread++;
+      } 
+      else if(validate == 'R'){
+        rmotor = Serial.parseInt();
+        Serial.print("Right Motor: ");
+        Serial.println(rmotor);     
+        mvalsread++;  
+      }
+    }
+    if(mvalsread == 2){
+      rightWheel.drive(rmotor);
+      leftWheel.drive(lmotor);
+    } else {
+      Serial.println("Malformed String for Motor!");
+    }
+    break;
+    
   case 'l':
+    Serial.println("Moving servo");
     loadingServo.write(loadingServo.read() + 90);
     break;
 
   case 'u':
+    Serial.println("Resetting servo");
     loadingServo.write(0);
     break;
 
-   case 'i':
-     int in = Serial.parseInt();
-     Serial.print("Got integer: ");
-     Serial.println(in);
+   case 'p':
+     Serial.println("Pulling arm back");
+     break;
+
+   case 'k':
+     Serial.println("Latching arm");
+     break;
+
+   case 'r':
+     Serial.println("Releasing Pulley");
+     break;
+
+   case 's':
+     Serial.println("Releasing Latch");
      break;
  }
 
-  move();
+  //move();
 }
-
+/* 
 void move(){
   if(moving){ //IF WE SHOULD BE MOVING
 //    Serial.println("Driving");
@@ -109,78 +125,4 @@ void move(){
     rightWheel.brake();
   }
 }
-
-void ledline(int n){
-  int d = 50;
-  for(int i=0; i<n; i++){
-    digitalWrite(PIN_DEBUG_LED_1,HIGH);
-    delay(d);
-    digitalWrite(PIN_DEBUG_LED_2,HIGH);
-    delay(d);
-    digitalWrite(PIN_DEBUG_LED_3,HIGH);
-    digitalWrite(PIN_DEBUG_LED_1,LOW);
-    delay(d);
-    digitalWrite(PIN_DEBUG_LED_4,HIGH);
-    digitalWrite(PIN_DEBUG_LED_2,LOW);
-    delay(d);
-    digitalWrite(PIN_DEBUG_LED_3,LOW);
-    delay(d);
-    digitalWrite(PIN_DEBUG_LED_4,LOW);
-  }
-}
-
-void ledbounce(int n){
-  int d = 50;
-  for(int i=0; i<n; i++){
-    digitalWrite(PIN_DEBUG_LED_1,HIGH);
-    delay(d);
-    digitalWrite(PIN_DEBUG_LED_2,HIGH);
-    delay(d);
-    digitalWrite(PIN_DEBUG_LED_3,HIGH);
-    digitalWrite(PIN_DEBUG_LED_1,LOW);
-    delay(d);
-    digitalWrite(PIN_DEBUG_LED_4,HIGH);
-    digitalWrite(PIN_DEBUG_LED_2,LOW);
-    delay(d);
-    digitalWrite(PIN_DEBUG_LED_3,LOW);
-    delay(d);
-    
-    digitalWrite(PIN_DEBUG_LED_3,HIGH);
-    delay(d);
-    digitalWrite(PIN_DEBUG_LED_2,HIGH);
-    digitalWrite(PIN_DEBUG_LED_4,LOW);
-    delay(d);
-    digitalWrite(PIN_DEBUG_LED_1,HIGH);
-    digitalWrite(PIN_DEBUG_LED_3,LOW);
-    delay(d);
-    digitalWrite(PIN_DEBUG_LED_2,LOW);
-    delay(d);
-    digitalWrite(PIN_DEBUG_LED_1,LOW);
-  }
-}
-
-void altflicker(int n){
-  int d = 250;
-  for(int i=0;i<n;i++){
-    digitalWrite(PIN_DEBUG_LED_2,LOW);
-    digitalWrite(PIN_DEBUG_LED_4,LOW);
-    digitalWrite(PIN_DEBUG_LED_1,HIGH);
-    digitalWrite(PIN_DEBUG_LED_3,HIGH);
-    delay(d);
-
-    digitalWrite(PIN_DEBUG_LED_2,HIGH);
-    digitalWrite(PIN_DEBUG_LED_4,HIGH);
-    digitalWrite(PIN_DEBUG_LED_1,LOW);
-    digitalWrite(PIN_DEBUG_LED_3,LOW);
-    delay(d);
-    
-  }
-  off();
-}
-
-void off(){
-  digitalWrite(PIN_DEBUG_LED_1,LOW);
-  digitalWrite(PIN_DEBUG_LED_2,LOW);
-  digitalWrite(PIN_DEBUG_LED_3,LOW);
-  digitalWrite(PIN_DEBUG_LED_4,LOW);
-}
+ */

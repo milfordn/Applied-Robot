@@ -26,3 +26,11 @@ textarea{
 	margin: 10px auto;
 	background-color: rgb(100,100,100);
 }
+#status{
+	list-style-type: none;
+	padding: 5px 0;
+}
+#status li{
+	padding: 1px 5px;
+	display:inline-block;
+}

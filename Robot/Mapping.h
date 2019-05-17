@@ -1,23 +1,38 @@
 #ifndef MAPPING_H
 #define MAPPING_H
 
+/* No longer used
 #define PIN_DRIVE_LEFT_EN 11
 #define PIN_DRIVE_LEFT_IN1 13
 #define PIN_DRIVE_LEFT_IN2 12
 #define PIN_DRIVE_RIGHT_EN 9
 #define PIN_DRIVE_RIGHT_IN1 8
 #define PIN_DRIVE_RIGHT_IN2 10
+*/
 
+/* No longer used
 #define PIN_ENCODER_LEFT_A 0
 #define PIN_ENCODER_LEFT_B 0
 #define PIN_ENCODER_RIGHT_A 0
 #define PIN_ENCODER_RIGHT_B 0
+*/
+
+#define PIN_SWITCH_LATCH 7
+#define PIN_MOTOR_LATCH_EN 11
+#define PIN_MOTOR_LATCH_IN1 13
+#define PIN_MOTOR_LATCH_IN2 12
+
+#define PIN_MOTOR_CATAPULT_EN 9
+#define PIN_MOTOR_CATAPULT_IN1 8
+#define PIN_MOTOR_CATAPULT_IN2 10
 
 #define PIN_SERVO_LOAD 6
 
+/* No longer used
 #define PIN_DEBUG_LED_1 10
 #define PIN_DEBUG_LED_2 9
 #define PIN_DEBUG_LED_3 8
 #define PIN_DEBUG_LED_4 7
+*/
 
 #endif

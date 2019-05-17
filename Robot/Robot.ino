@@ -9,20 +9,32 @@ bool obstacle = false;
 
 Servo loadingServo;
 
-Wheel leftWheel(
-  PIN_DRIVE_LEFT_EN, 
-  PIN_DRIVE_LEFT_IN1, 
-  PIN_DRIVE_LEFT_IN2, 
-  PIN_ENCODER_LEFT_A, 
-  PIN_ENCODER_LEFT_B
+// Wheel leftWheel(
+//   PIN_DRIVE_LEFT_EN, 
+//   PIN_DRIVE_LEFT_IN1, 
+//   PIN_DRIVE_LEFT_IN2, 
+//   PIN_ENCODER_LEFT_A, 
+//   PIN_ENCODER_LEFT_B
+// );
+
+// Wheel rightWheel(
+//   PIN_DRIVE_RIGHT_EN,
+//   PIN_DRIVE_RIGHT_IN1,
+//   PIN_DRIVE_RIGHT_IN2,
+//   PIN_ENCODER_RIGHT_A,
+//   PIN_ENCODER_RIGHT_B
+// );
+
+MotorController latchMotor(
+  PIN_MOTOR_LATCH_EN,
+  PIN_MOTOR_LATCH_IN1,
+  PIN_MOTOR_LATCH_IN2
 );
 
-Wheel rightWheel(
-  PIN_DRIVE_RIGHT_EN,
-  PIN_DRIVE_RIGHT_IN1,
-  PIN_DRIVE_RIGHT_IN2,
-  PIN_ENCODER_RIGHT_A,
-  PIN_ENCODER_RIGHT_B
+MotorController catapultMotor(
+  PIN_MOTOR_CATAPULT_EN,
+  PIN_MOTOR_CATAPULT_IN1,
+  PIN_MOTOR_CATAPULT_IN2
 );
 
 void setup() {
@@ -32,7 +44,7 @@ void setup() {
   Serial.println("Connected");
   loadingServo.attach(PIN_SERVO_LOAD);
 
-  Wheel::registerLeftRight(&leftWheel, &rightWheel);
+  // Wheel::registerLeftRight(&leftWheel, &rightWheel);
 }
 
 void loop() {
@@ -53,27 +65,27 @@ unsigned long before,after;
 
    //joystick
   case 'M':
-    while(mvalsread<2){
-      validate = Serial.read();
-      if(validate=='L'){
-        lmotor = Serial.parseInt();
-        Serial.print("Left Motor: ");
-        Serial.println(lmotor);
-        mvalsread++;
-      } 
-      else if(validate == 'R'){
-        rmotor = Serial.parseInt();
-        Serial.print("Right Motor: ");
-        Serial.println(rmotor);     
-        mvalsread++;  
-      }
-    }
-    if(mvalsread == 2){
-      rightWheel.drive(rmotor);
-      leftWheel.drive(lmotor);
-    } else {
-      Serial.println("Malformed String for Motor!");
-    }
+    // while(mvalsread<2){
+    //   validate = Serial.read();
+    //   if(validate=='L'){
+    //     lmotor = Serial.parseInt();
+    //     Serial.print("Left Motor: ");
+    //     Serial.println(lmotor);
+    //     mvalsread++;
+    //   } 
+    //   else if(validate == 'R'){
+    //     rmotor = Serial.parseInt();
+    //     Serial.print("Right Motor: ");
+    //     Serial.println(rmotor);     
+    //     mvalsread++;  
+    //   }
+    // }
+    // if(mvalsread == 2){
+    //   rightWheel.drive(rmotor);
+    //   leftWheel.drive(lmotor);
+    // } else {
+    //   Serial.println("Malformed String for Motor!");
+    // }
     break;
     
   case 'l':
@@ -88,18 +100,27 @@ unsigned long before,after;
 
    case 'p':
      Serial.println("Pulling arm back");
+     catapultMotor.drive(100);
      break;
 
    case 'k':
      Serial.println("Latching arm");
+     if(digitalRead(PIN_SWITCH_LATCH)){
+       latchMotor.drive(100);
+     }
+     else{
+       latchMotor.brake();
+     }
      break;
 
    case 'r':
      Serial.println("Releasing Pulley");
+     catapultMotor.drive(-100);
      break;
 
    case 's':
      Serial.println("Releasing Latch");
+     latchMotor.drive(-100);
      break;
  }
 

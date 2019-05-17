@@ -1,19 +1,8 @@
-import matplotlib.pyplot as mpl
 import math
 
 # https://gist.github.com/svdamani/1015c5c4b673c3297309
 
-points = [
-    (0, 0),
-    # (0.01, 1),
-    (0.3, 4),
-    (0.5, 5),
-    (0.7, 6),
-    # (0.99, 9),
-    (1, 10)
-]
-
-def spline(coords):
+def makeSpline(coords):
     n = len(coords) - 1
     h = []
     for i in range(0, n):
@@ -106,10 +95,27 @@ def rectify(splines, points, resolution):
 
     return values
 
-splines = spline(points)
-print(splines)
-rectified = rectify(splines, points, 0.01)
+def valueAt(splines, points, t):
+    index = 0
+    while(points[index+1][0] < t):
+        index += 1
+    
+    param = t - points[index][0]
+    spline = splines[index]
+    return value(spline, param)
 
-mpl.plot(rectified)
-mpl.legend(["position", "heading", "angular velocity", "Total distance traveled"])
-mpl.show()
+#gets distance and heading to the next `count` points, spaced out by `resolution`
+def getLearningParameters(spline, points, loc, resolution=0.1, count=5):
+    toRet = []
+    boundX = points[-1][0]
+
+    (x0, y0) = loc
+    for i in range(0, count):
+        dx = resolution * i
+        newx = min(boundX, x0 + dx)
+        dy = valueAt(spline, points, newx) - y0
+        dist = math.sqrt(dx * dx + dy * dy)
+        angle = math.atan2(dy, dx)
+        toRet.append((dist, angle))
+
+    return toRet

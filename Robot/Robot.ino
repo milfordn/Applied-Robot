@@ -1,6 +1,6 @@
 #include "Mapping.h"
 #include "Wheel.h"
-#include "PIDF.h"
+#include "HBridge.h"
 #include <Servo.h>
 
 char action;
@@ -25,13 +25,13 @@ Servo loadingServo;
 //   PIN_ENCODER_RIGHT_B
 // );
 
-MotorController latchMotor(
+HBridge latchMotor(
   PIN_MOTOR_LATCH_EN,
   PIN_MOTOR_LATCH_IN1,
   PIN_MOTOR_LATCH_IN2
 );
 
-MotorController catapultMotor(
+HBridge catapultMotor(
   PIN_MOTOR_CATAPULT_EN,
   PIN_MOTOR_CATAPULT_IN1,
   PIN_MOTOR_CATAPULT_IN2

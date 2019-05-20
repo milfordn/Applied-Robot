@@ -1,6 +1,6 @@
-#include "MotorController.h"
+#include "HBridge.h"
 
-MotorController::MotorController(byte en, byte in1, byte in2){
+HBridge::HBridge(byte en, byte in1, byte in2){
     this->pin_en = en;
     this->pin_in1 = in1;
     this->pin_in2 = in2;
@@ -12,7 +12,7 @@ MotorController::MotorController(byte en, byte in1, byte in2){
     analogWrite(pin_en, 0);
 }
 
-void MotorController::drive(short vel){
+void HBridge::drive(short vel){
     if(vel < 0){
       vel *= -1;
       digitalWrite(pin_in1, HIGH);
@@ -25,7 +25,7 @@ void MotorController::drive(short vel){
     analogWrite(pin_en, (byte)vel);
 }
 
-void MotorController::brake(){
+void HBridge::brake(){
     analogWrite(pin_en, 255);
     digitalWrite(pin_in1, HIGH);
     digitalWrite(pin_in2, HIGH);

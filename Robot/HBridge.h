@@ -1,13 +1,13 @@
-#ifndef MOTOR_CONTROLLER_H
-#define MOTOR_CONTROLLER_H
+#ifndef H_BRIDGE_H
+#define H_BRIDGE_H
 
 #include <Arduino.h>
 
-class MotorController{
+class HBridge{
 private:
     byte pin_en, pin_in1, pin_in2;
 public:
-    MotorController(byte en, byte in1, byte in2);
+    HBridge(byte en, byte in1, byte in2);
 
     // -255 < vel < 255
     void drive(short vel);

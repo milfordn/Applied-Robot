@@ -9,21 +9,17 @@ bool obstacle = false;
 
 Servo loadingServo;
 
-// Wheel leftWheel(
-//   PIN_DRIVE_LEFT_EN, 
-//   PIN_DRIVE_LEFT_IN1, 
-//   PIN_DRIVE_LEFT_IN2, 
-//   PIN_ENCODER_LEFT_A, 
-//   PIN_ENCODER_LEFT_B
-// );
+Wheel leftWheel(
+  PIN_DRIVE_LEFT_PWM,
+  PIN_ENCODER_LEFT_A,
+  PIN_ENCODER_LEFT_B
+);
 
-// Wheel rightWheel(
-//   PIN_DRIVE_RIGHT_EN,
-//   PIN_DRIVE_RIGHT_IN1,
-//   PIN_DRIVE_RIGHT_IN2,
-//   PIN_ENCODER_RIGHT_A,
-//   PIN_ENCODER_RIGHT_B
-// );
+Wheel rightWheel(
+  PIN_DRIVE_RIGHT_PWM,
+  PIN_ENCODER_RIGHT_A,
+  PIN_ENCODER_RIGHT_B
+);
 
 HBridge latchMotor(
   PIN_MOTOR_LATCH_EN,
@@ -65,31 +61,31 @@ unsigned long before,after;
 
    //joystick
   case 'M':
-    // while(mvalsread<2){
-    //   validate = Serial.read();
-    //   if(validate=='L'){
-    //     lmotor = Serial.parseInt();
-    //     Serial.print("Left Motor: ");
-    //     Serial.println(lmotor);
-    //     mvalsread++;
-    //   } 
-    //   else if(validate == 'R'){
-    //     rmotor = Serial.parseInt();
-    //     Serial.print("Right Motor: ");
-    //     Serial.println(rmotor);     
-    //     mvalsread++;  
-    //   }
-    // }
-    // if(mvalsread == 2){
-    //   rightWheel.drive(rmotor);
-    //   leftWheel.drive(lmotor);
-    // } else {
-    //   Serial.println("Malformed String for Motor!");
-    // }
+     while(mvalsread<2){
+       validate = Serial.read();
+       if(validate=='L'){
+         lmotor = Serial.parseInt();
+         Serial.print("Left Motor: ");
+         Serial.println(lmotor);
+         mvalsread++;
+       } 
+       else if(validate == 'R'){
+         rmotor = Serial.parseInt();
+         Serial.print("Right Motor: ");
+         Serial.println(rmotor);     
+         mvalsread++;  
+       }
+     }
+     if(mvalsread == 2){
+       rightWheel.drive(rmotor);
+       leftWheel.drive(lmotor);
+     } else {
+       Serial.println("Malformed String for Motor!");
+     }
     break;
     
   case 'l':
-    Serial.println("Moving servo");
+    Serial.println("Moving Loading servo");
     loadingServo.write(loadingServo.read() + 90);
     break;
 
@@ -114,7 +110,7 @@ unsigned long before,after;
      break;
 
    case 'r':
-     Serial.println("Releasing Pulley");
+     Serial.println("Releasing Arm motor");
      catapultMotor.drive(-100);
      break;
 
@@ -143,7 +139,7 @@ void move(){
     //Turn off motors
 //    Serial.println("Braking");
     leftWheel.brake();
-    rightWheel.brake();
+    rightWheel.ss();
   }
 }
  */

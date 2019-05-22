@@ -15,8 +15,8 @@ var VirtualJoystick	= function(opts)
 	this._deadzoneX = opts.deadzoneX || 0;
 	this._deadzoneY = opts.deadzoneY || 0;
 	this._motorMax = opts.motorMax || 255;
-	this._motorMin = opts.motorMin || -255;
-	this._motorAmp = opts.motorAmp || 1;
+	this._motorMin = opts.motorMin || 0;
+	this._motorAmp = opts.motorAmp || 1.;
 
 	this._container.style.position	= "relative"
 

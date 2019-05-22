@@ -21,6 +21,17 @@ Wheel rightWheel(
   PIN_ENCODER_RIGHT_B
 );
 
+//HBridge leftWheel(
+//  PIN_DRIVE_LEFT_EN,
+//  PIN_DRIVE_LEFT_IN1,
+//  PIN_DRIVE_LEFT_IN2
+//);
+//HBridge rightWheel(
+//  PIN_DRIVE_RIGHT_PWM,
+//  PIN_DRIVE_RIGHT_IN1,
+//  PIN_DRIVE_RIGHT_IN2
+//);
+
 HBridge latchMotor(
   PIN_MOTOR_LATCH_EN,
   PIN_MOTOR_LATCH_IN1,
@@ -60,7 +71,7 @@ unsigned long before,after;
  switch(action){
 
    //joystick
-  case 'M':
+//  case 'M':
 //     while(mvalsread<2){
 //       validate = Serial.read();
 //       if(validate=='L'){
@@ -88,14 +99,14 @@ unsigned long before,after;
     lmotor = Serial.parseInt();
     Serial.print("Left Motor: ");
     Serial.println(lmotor);
-    leftWheel.drive((byte)lmotor);
+    leftWheel.drive((short)lmotor);
     break;
 
   case 'R':
     rmotor = Serial.parseInt();
     Serial.print("Right Motor: ");
     Serial.println(rmotor);
-    rightWheel.drive((byte)rmotor);
+    rightWheel.drive((short)rmotor);
     break;
     
   case 'l':

@@ -61,27 +61,41 @@ unsigned long before,after;
 
    //joystick
   case 'M':
-     while(mvalsread<2){
-       validate = Serial.read();
-       if(validate=='L'){
-         lmotor = Serial.parseInt();
-         Serial.print("Left Motor: ");
-         Serial.println(lmotor);
-         mvalsread++;
-       } 
-       else if(validate == 'R'){
-         rmotor = Serial.parseInt();
-         Serial.print("Right Motor: ");
-         Serial.println(rmotor);     
-         mvalsread++;  
-       }
-     }
-     if(mvalsread == 2){
-       rightWheel.drive(rmotor);
-       leftWheel.drive(lmotor);
-     } else {
-       Serial.println("Malformed String for Motor!");
-     }
+//     while(mvalsread<2){
+//       validate = Serial.read();
+//       if(validate=='L'){
+//         lmotor = Serial.parseInt();
+//         mvalsread++;
+//       } 
+//       else if(validate == 'R'){
+//         rmotor = Serial.parseInt();
+//         mvalsread++;  
+//       }
+//     }
+//     if(mvalsread == 2){
+//       Serial.print("Left Motor: ");
+//       Serial.println(lmotor);
+//       Serial.print("Right Motor: ");
+//       Serial.println(rmotor);     
+//       rightWheel.drive((byte)rmotor);
+//       leftWheel.drive((byte)lmotor);
+//     } else {
+//       Serial.println("Malformed String for Motor!");
+//     }
+//    break;
+
+  case 'L':
+    lmotor = Serial.parseInt();
+    Serial.print("Left Motor: ");
+    Serial.println(lmotor);
+    leftWheel.drive((byte)lmotor);
+    break;
+
+  case 'R':
+    rmotor = Serial.parseInt();
+    Serial.print("Right Motor: ");
+    Serial.println(rmotor);
+    rightWheel.drive((byte)rmotor);
     break;
     
   case 'l':

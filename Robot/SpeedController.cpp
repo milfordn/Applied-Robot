@@ -5,7 +5,7 @@ SpeedController::SpeedController(byte en){
 
     pinMode(pin_en, OUTPUT);
 
-    analogWrite(pin_en, 0);
+    analogWrite(pin_en, 255);
 }
 
 void SpeedController::drive(byte vel){

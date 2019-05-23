@@ -9,29 +9,41 @@ bool obstacle = false;
 
 Servo loadingServo;
 
-Wheel leftWheel(
+//Wheel leftWheel(
+//  PIN_DRIVE_LEFT_PWM,
+//  PIN_ENCODER_LEFT_A,
+//  PIN_ENCODER_LEFT_B
+//);
+//
+//Wheel rightWheel(
+//  PIN_DRIVE_RIGHT_PWM,
+//  PIN_ENCODER_RIGHT_A,
+//  PIN_ENCODER_RIGHT_B
+//);
+
+HBridge leftWheel(
   PIN_DRIVE_LEFT_PWM,
-  PIN_ENCODER_LEFT_A,
-  PIN_ENCODER_LEFT_B
+  PIN_DRIVE_LEFT_IN1,
+  PIN_DRIVE_LEFT_IN2
 );
 
-Wheel rightWheel(
+HBridge rightWheel(
   PIN_DRIVE_RIGHT_PWM,
-  PIN_ENCODER_RIGHT_A,
-  PIN_ENCODER_RIGHT_B
+  PIN_DRIVE_RIGHT_IN1,
+  PIN_DRIVE_RIGHT_IN2
 );
 
-HBridge latchMotor(
-  PIN_MOTOR_LATCH_EN,
-  PIN_MOTOR_LATCH_IN1,
-  PIN_MOTOR_LATCH_IN2
-);
-
-HBridge catapultMotor(
-  PIN_MOTOR_CATAPULT_EN,
-  PIN_MOTOR_CATAPULT_IN1,
-  PIN_MOTOR_CATAPULT_IN2
-);
+//HBridge latchMotor(
+//  PIN_MOTOR_LATCH_EN,
+//  PIN_MOTOR_LATCH_IN1,
+//  PIN_MOTOR_LATCH_IN2
+//);
+//
+//HBridge catapultMotor(
+//  PIN_MOTOR_CATAPULT_EN,
+//  PIN_MOTOR_CATAPULT_IN1,
+//  PIN_MOTOR_CATAPULT_IN2
+//);
 
 void setup() {
   // put your setup code here, to run once:
@@ -43,8 +55,22 @@ void setup() {
   // Wheel::registerLeftRight(&leftWheel, &rightWheel);
 }
 
+bool endof  = false;
+
 void loop() {
   // put your main code here, to run repeatedly:
+
+  if(endof){
+    return;
+  }
+  
+  leftWheel.drive(-255);
+  rightWheel.drive(-255);
+  delay(7000);
+
+  endof = true;
+  return;
+  
   action=0;
    moving = true;
 
@@ -110,27 +136,27 @@ unsigned long before,after;
 
    case 'p':
      Serial.println("Pulling arm back");
-     catapultMotor.drive(100);
+//     catapultMotor.drive(100);
      break;
 
    case 'k':
      Serial.println("Latching arm");
-     if(digitalRead(PIN_SWITCH_LATCH)){
-       latchMotor.drive(100);
+     if(false ){//digitalRead(PIN_SWITCH_LATCH)){
+//       latchMotor.drive(100);
      }
      else{
-       latchMotor.brake();
+//       latchMotor.brake();
      }
      break;
 
    case 'r':
      Serial.println("Releasing Arm motor");
-     catapultMotor.drive(-100);
+//     catapultMotor.drive(-100);
      break;
 
    case 's':
      Serial.println("Releasing Latch");
-     latchMotor.drive(-100);
+//     latchMotor.drive(-100);
      break;
  }
 

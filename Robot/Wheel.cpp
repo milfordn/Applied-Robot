@@ -3,7 +3,7 @@
 Wheel * Wheel::registeredLeft = NULL;
 Wheel * Wheel::registeredRight = NULL;
 
-Wheel::Wheel(byte en, byte enc_a, byte enc_b) : SpeedController(en) {
+Wheel::Wheel(byte en, byte in1, byte in2, byte enc_a, byte enc_b) : HBridge(en, in1, in2) {
     pin_enc_a = enc_a;
     pin_enc_b = enc_b;
 

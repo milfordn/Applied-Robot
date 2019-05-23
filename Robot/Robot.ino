@@ -33,6 +33,12 @@ HBridge rightWheel(
   PIN_DRIVE_RIGHT_IN2
 );
 
+HBridge latchMotor(
+  PIN_MOTOR_LATCH_EN,
+  PIN_MOTOR_LATCH_IN1,
+  PIN_MOTOR_LATCH_IN2
+);
+
 void setup() {
   // put your setup code here, to run once:
 

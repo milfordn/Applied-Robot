@@ -33,18 +33,6 @@ HBridge rightWheel(
   PIN_DRIVE_RIGHT_IN2
 );
 
-//HBridge latchMotor(
-//  PIN_MOTOR_LATCH_EN,
-//  PIN_MOTOR_LATCH_IN1,
-//  PIN_MOTOR_LATCH_IN2
-//);
-//
-//HBridge catapultMotor(
-//  PIN_MOTOR_CATAPULT_EN,
-//  PIN_MOTOR_CATAPULT_IN1,
-//  PIN_MOTOR_CATAPULT_IN2
-//);
-
 void setup() {
   // put your setup code here, to run once:
 
@@ -86,7 +74,7 @@ unsigned long before,after;
  switch(action){
 
    //joystick
-  case 'M':
+//  case 'M':
 //     while(mvalsread<2){
 //       validate = Serial.read();
 //       if(validate=='L'){
@@ -114,14 +102,14 @@ unsigned long before,after;
     lmotor = Serial.parseInt();
     Serial.print("Left Motor: ");
     Serial.println(lmotor);
-    leftWheel.drive((byte)lmotor);
+    leftWheel.drive((short)lmotor);
     break;
 
   case 'R':
     rmotor = Serial.parseInt();
     Serial.print("Right Motor: ");
     Serial.println(rmotor);
-    rightWheel.drive((byte)rmotor);
+    rightWheel.drive((short)rmotor);
     break;
     
   case 'l':

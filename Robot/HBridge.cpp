@@ -22,7 +22,7 @@ void HBridge::drive(short vel){
       digitalWrite(pin_in1, LOW);
       digitalWrite(pin_in2, HIGH);
     }
-    analogWrite(pin_en, (byte)vel);
+    analogWrite(pin_en,vel);
 }
 
 void HBridge::brake(){

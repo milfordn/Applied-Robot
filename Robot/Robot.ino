@@ -47,21 +47,6 @@ bool endof  = false;
 
 void loop() {
   // put your main code here, to run repeatedly:
-
-  if(endof){
-    return;
-  }
-  
-  leftWheel.drive(-255);
-  rightWheel.drive(-255);
-  delay(7000);
-
-  endof = true;
-  return;
-  
-  action=0;
-   moving = true;
-
  if(Serial.available() > 0){
    action = Serial.read();
  }
@@ -100,15 +85,15 @@ unsigned long before,after;
 
   case 'L':
     lmotor = Serial.parseInt();
-    Serial.print("Left Motor: ");
-    Serial.println(lmotor);
+//    Serial.print("Left Motor: ");
+//    Serial.println(lmotor);
     leftWheel.drive((short)lmotor);
     break;
 
   case 'R':
     rmotor = Serial.parseInt();
-    Serial.print("Right Motor: ");
-    Serial.println(rmotor);
+//    Serial.print("Right Motor: ");
+//    Serial.println(rmotor);
     rightWheel.drive((short)rmotor);
     break;
     

@@ -33,6 +33,7 @@ HBridge rightWheel(
   PIN_DRIVE_RIGHT_IN2
 );
 
+
 HBridge latchMotor(
   PIN_MOTOR_LATCH_EN,
   PIN_MOTOR_LATCH_IN1,
@@ -47,6 +48,9 @@ void setup() {
   loadingServo.attach(PIN_SERVO_LOAD);
 
   // Wheel::registerLeftRight(&leftWheel, &rightWheel);
+
+  pinMode(PIN_SWITCH_LATCH_1, INPUT);
+  pinMode(PIN_SWITCH_LATCH_2, INPUT);
 }
 
 bool endof  = false;
@@ -54,16 +58,16 @@ bool endof  = false;
 void loop() {
   // put your main code here, to run repeatedly:
 
-  if(endof){
-    return;
-  }
-  
-  leftWheel.drive(-255);
-  rightWheel.drive(-255);
-  delay(7000);
-
-  endof = true;
-  return;
+//  if(endof){
+//    return;
+//  }
+//  
+//  leftWheel.drive(-255);
+//  rightWheel.drive(-255);
+//  delay(7000);
+//
+//  endof = true;
+//  return;
   
   action=0;
    moving = true;
@@ -72,37 +76,10 @@ void loop() {
    action = Serial.read();
  }
 
-int lmotor,rmotor,index;
-bool failure;
-char validate;
-int mvalsread = 0;
-unsigned long before,after;
+  int lmotor,rmotor,index;
+  int mvalsread = 0;
+  unsigned long before,after;
  switch(action){
-
-   //joystick
-//  case 'M':
-//     while(mvalsread<2){
-//       validate = Serial.read();
-//       if(validate=='L'){
-//         lmotor = Serial.parseInt();
-//         mvalsread++;
-//       } 
-//       else if(validate == 'R'){
-//         rmotor = Serial.parseInt();
-//         mvalsread++;  
-//       }
-//     }
-//     if(mvalsread == 2){
-//       Serial.print("Left Motor: ");
-//       Serial.println(lmotor);
-//       Serial.print("Right Motor: ");
-//       Serial.println(rmotor);     
-//       rightWheel.drive((byte)rmotor);
-//       leftWheel.drive((byte)lmotor);
-//     } else {
-//       Serial.println("Malformed String for Motor!");
-//     }
-//    break;
 
   case 'L':
     lmotor = Serial.parseInt();
@@ -135,12 +112,10 @@ unsigned long before,after;
 
    case 'k':
      Serial.println("Latching arm");
-     if(false ){//digitalRead(PIN_SWITCH_LATCH)){
-//       latchMotor.drive(100);
+     while(digitalRead(PIN_SWITCH_LATCH_1) == LOW){ //DRIVE WHILE SWITCH IS OPEN
+       latchMotor.drive(100);
      }
-     else{
-//       latchMotor.brake();
-     }
+     latchMotor.brake();
      break;
 
    case 'r':
@@ -154,26 +129,4 @@ unsigned long before,after;
      break;
  }
 
-  //move();
 }
-/* 
-void move(){
-  if(moving){ //IF WE SHOULD BE MOVING
-//    Serial.println("Driving");
-    if(!obstacle){ //There is no obstacle 
-      //MOTOR LOGIC HERE
-      leftWheel.drive(255);
-      rightWheel.drive(255);
-    } else { //There is an obstacle
-      //STOP MOTORS OR SWERVE
-      leftWheel.drive(-100);
-      rightWheel.drive(0);
-    }
-  } else{ //IF NOT
-    //Turn off motors
-//    Serial.println("Braking");
-    leftWheel.brake();
-    rightWheel.ss();
-  }
-}
- */

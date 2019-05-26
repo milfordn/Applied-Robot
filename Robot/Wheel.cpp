@@ -25,15 +25,16 @@ Wheel::~Wheel(){
 
 float Wheel::getSpeed(){
     bool encoderUpdated = false;
-    float angularVel;
+    float vel;
     do {
-        angularVel = encoderDir * (PI * (2 / TICKS_PER_REV)) / ((encoderTime - encoderTimeLast) / 1000000.); //in degrees
-    } while(encoderUpdated); //re-calculate if an interrupt happened during the calculations
-    return angularVel * WHEEL_DIAMETER / 2;
+        //inches / second = (inches / tick) * (tick / second) = (inches / tick) / (second / tick)
+        vel = inchesPerTick / ((encoderTime - encoderTimeLast) / 1000000.);
+     } while(encoderUpdated); //re-calculate if an interrupt happened during the calculations
+    return vel;
 }
 
 float Wheel::getDistance(){
-    return encoderTicks * (PI * (2 / TICKS_PER_REV)) * WHEEL_DIAMETER / 2;
+    return encoderTicks * inchesPerTick;
 }
 
 void Wheel::generalISR(Wheel * wheel){

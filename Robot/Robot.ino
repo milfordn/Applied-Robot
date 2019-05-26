@@ -9,29 +9,33 @@ bool obstacle = false;
 
 Servo loadingServo;
 
-//Wheel leftWheel(
-//  PIN_DRIVE_LEFT_PWM,
-//  PIN_ENCODER_LEFT_A,
-//  PIN_ENCODER_LEFT_B
-//);
-//
-//Wheel rightWheel(
-//  PIN_DRIVE_RIGHT_PWM,
-//  PIN_ENCODER_RIGHT_A,
-//  PIN_ENCODER_RIGHT_B
-//);
-
-HBridge leftWheel(
+Wheel leftWheel(
   PIN_DRIVE_LEFT_PWM,
   PIN_DRIVE_LEFT_IN1,
-  PIN_DRIVE_LEFT_IN2
+  PIN_DRIVE_LEFT_IN2,
+  PIN_ENCODER_LEFT_A,
+  PIN_ENCODER_LEFT_B
 );
 
-HBridge rightWheel(
+Wheel rightWheel(
   PIN_DRIVE_RIGHT_PWM,
   PIN_DRIVE_RIGHT_IN1,
-  PIN_DRIVE_RIGHT_IN2
+  PIN_DRIVE_RIGHT_IN2,
+  PIN_ENCODER_RIGHT_A,
+  PIN_ENCODER_RIGHT_B
 );
+
+//HBridge leftWheel(
+//  PIN_DRIVE_LEFT_PWM,
+//  PIN_DRIVE_LEFT_IN1,
+//  PIN_DRIVE_LEFT_IN2
+//);
+//
+//HBridge rightWheel(
+//  PIN_DRIVE_RIGHT_PWM,
+//  PIN_DRIVE_RIGHT_IN1,
+//  PIN_DRIVE_RIGHT_IN2
+//);
 
 
 HBridge latchMotor(
@@ -47,7 +51,7 @@ void setup() {
   Serial.println("Connected");
   loadingServo.attach(PIN_SERVO_LOAD);
 
-  // Wheel::registerLeftRight(&leftWheel, &rightWheel);
+  Wheel::registerLeftRight(&leftWheel, &rightWheel);
 
   pinMode(PIN_SWITCH_LATCH_1, INPUT);
   pinMode(PIN_SWITCH_LATCH_2, INPUT);
@@ -57,6 +61,25 @@ bool endof  = false;
 
 void loop() {
   // put your main code here, to run repeatedly:
+
+  if(leftWheel.getDistance() < 60){
+    leftWheel.drive(150);
+  }
+  else{
+    leftWheel.drive(0);
+  }
+
+  if(rightWheel.getDistance() < 60){
+  }
+  else{
+    rightWheel.drive(0);
+  }
+
+  Serial.println(leftWheel.getDistance());
+//  Serial.println(rightWheel.getDistance());
+
+  return;
+  
  if(Serial.available() > 0){
    action = Serial.read();
  }

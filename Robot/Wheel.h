@@ -2,7 +2,7 @@
 #define WHEEL_H
 
 #define WHEEL_DIAMETER 7 //inches
-#define TICKS_PER_REV 8
+#define TICKS_PER_REV 374.325 //ticks per output shaft revolution
 
 #include <Arduino.h>
 #include "HBridge.h"
@@ -12,8 +12,8 @@ private:
     byte pin_enc_a, pin_enc_b;
 
     volatile long encoderTime, encoderTimeLast;
-    volatile int8_t encoderTicks = 0;
-    volatile byte encoderDir = 0;
+    volatile int16_t encoderTicks = 0;
+    volatile int8_t encoderDir = 0;
     volatile bool encoderUpdated;
 
     void detachEncoderISR();
@@ -23,6 +23,7 @@ private:
     static void leftEncoderISR();
     static void rightEncoderISR();
     static void generalISR(Wheel * wheel);
+    const float inchesPerTick = PI * WHEEL_DIAMETER / TICKS_PER_REV;
 public:
     static void registerLeftRight(Wheel * left, Wheel * right);
     Wheel(byte en, byte in1, byte in2, byte enc_a, byte enc_b);

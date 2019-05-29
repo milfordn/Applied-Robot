@@ -10,9 +10,10 @@ Wheel::Wheel(byte en, byte in1, byte in2, byte enc_a, byte enc_b) : HBridge(en, 
     pinMode(pin_enc_a, INPUT);
     pinMode(pin_enc_b, INPUT);
 
-    digitalWrite(pin_enc_b, LOW);
+//    digitalWrite(pin_enc_b, LOW);
+//    digitalWrite(pin_enc_a, LOW);
     encoderTime = micros();
-    encoderTimeLast = encoderTime - 1000;
+    encoderTimeLast = encoderTime - 250;
 }
 
 void Wheel::detachEncoderISR(){
@@ -34,7 +35,13 @@ float Wheel::getSpeed(){
 }
 
 float Wheel::getDistance(){
-    return encoderTicks * inchesPerTick;
+    return getTicks() * inchesPerTick;
+}
+
+int16_t Wheel::getTicks(){
+//  if(this == Wheel::registeredRight)
+//    return encoderTicks / 10;
+  return encoderTicks;
 }
 
 void Wheel::generalISR(Wheel * wheel){

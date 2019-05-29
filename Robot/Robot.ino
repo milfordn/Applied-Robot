@@ -25,23 +25,16 @@ Wheel rightWheel(
   PIN_ENCODER_RIGHT_B
 );
 
-//HBridge leftWheel(
-//  PIN_DRIVE_LEFT_PWM,
-//  PIN_DRIVE_LEFT_IN1,
-//  PIN_DRIVE_LEFT_IN2
-//);
-//
-//HBridge rightWheel(
-//  PIN_DRIVE_RIGHT_PWM,
-//  PIN_DRIVE_RIGHT_IN1,
-//  PIN_DRIVE_RIGHT_IN2
-//);
-
-
 HBridge latchMotor(
   PIN_MOTOR_LATCH_EN,
   PIN_MOTOR_LATCH_IN1,
   PIN_MOTOR_LATCH_IN2
+);
+
+HBridge catapultMotor(
+  PIN_MOTOR_CATAPULT_EN,
+  PIN_MOTOR_CATAPULT_IN1,
+  PIN_MOTOR_CATAPULT_IN2
 );
 
 void setup() {
@@ -53,32 +46,14 @@ void setup() {
 
   Wheel::registerLeftRight(&leftWheel, &rightWheel);
 
-  pinMode(PIN_SWITCH_LATCH_1, INPUT);
-  pinMode(PIN_SWITCH_LATCH_2, INPUT);
+  pinMode(PIN_SWITCH_LATCH_OPEN, INPUT_PULLUP);
+  pinMode(PIN_SWITCH_LATCH_CLOSE, INPUT_PULLUP);
 }
 
 bool endof  = false;
 
 void loop() {
   // put your main code here, to run repeatedly:
-
-  if(leftWheel.getDistance() < 60){
-    leftWheel.drive(150);
-  }
-  else{
-    leftWheel.drive(0);
-  }
-
-  if(rightWheel.getDistance() < 60){
-  }
-  else{
-    rightWheel.drive(0);
-  }
-
-  Serial.println(leftWheel.getDistance());
-//  Serial.println(rightWheel.getDistance());
-
-  return;
   
  if(Serial.available() > 0){
    action = Serial.read();
@@ -87,19 +62,19 @@ void loop() {
   int lmotor,rmotor,index;
   int mvalsread = 0;
   unsigned long before,after;
+
+//  Serial.println(digitalRead(PIN_SWITCH_LATCH_OPEN));
+
+//  action = 'k';
  switch(action){
 
   case 'L':
     lmotor = Serial.parseInt();
-//    Serial.print("Left Motor: ");
-//    Serial.println(lmotor);
     leftWheel.drive((short)lmotor);
     break;
 
   case 'R':
     rmotor = Serial.parseInt();
-//    Serial.print("Right Motor: ");
-//    Serial.println(rmotor);
     rightWheel.drive((short)rmotor);
     break;
     
@@ -115,25 +90,39 @@ void loop() {
 
    case 'p':
      Serial.println("Pulling arm back");
-//     catapultMotor.drive(100);
+     catapultMotor.drive(-255);
      break;
 
    case 'k':
      Serial.println("Latching arm");
-     while(digitalRead(PIN_SWITCH_LATCH_1) == LOW){ //DRIVE WHILE SWITCH IS OPEN
-       latchMotor.drive(100);
+     while(digitalRead(PIN_SWITCH_LATCH_CLOSE) == LOW){ //DRIVE WHILE SWITCH IS OPEN
+       latchMotor.drive(-150);
      }
-     latchMotor.brake();
+    Serial.println("Arm Latched");
+    latchMotor.brake();
+    catapultMotor.drive(50);
+    delay(2000);
+    catapultMotor.brake();
+    
      break;
 
    case 'r':
      Serial.println("Releasing Arm motor");
-//     catapultMotor.drive(-100);
+     catapultMotor.drive(-255);
+     delay(100);
+     catapultMotor.drive(0);
      break;
 
    case 's':
      Serial.println("Releasing Latch");
-//     latchMotor.drive(-100);
+     while(digitalRead(PIN_SWITCH_LATCH_OPEN) == HIGH){ //DRIVE WHILE SWITCH IS OPEN
+       latchMotor.drive(150);
+     }
+      Serial.println("Latch Released");
+      latchMotor.brake();
+     break;
+
+     default:
      break;
  }
 

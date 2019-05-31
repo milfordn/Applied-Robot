@@ -1,6 +1,7 @@
 #include "Mapping.h"
 #include "Wheel.h"
 #include "HBridge.h"
+#include "Switch.h"
 #include <Servo.h>
 
 char action;
@@ -37,6 +38,14 @@ HBridge catapultMotor(
   PIN_MOTOR_CATAPULT_IN2
 );
 
+Switch latchOpen(
+  PIN_SWITCH_LATCH_OPEN
+);
+
+Switch latchClose(
+  PIN_SWITCH_LATCH_CLOSE
+);
+
 void setup() {
   // put your setup code here, to run once:
 
@@ -46,8 +55,7 @@ void setup() {
 
   Wheel::registerLeftRight(&leftWheel, &rightWheel);
 
-  pinMode(PIN_SWITCH_LATCH_OPEN, INPUT_PULLUP);
-  pinMode(PIN_SWITCH_LATCH_CLOSE, INPUT_PULLUP);
+  latchOpen.setInverted(true);
 }
 
 bool endof  = false;
@@ -62,8 +70,6 @@ void loop() {
   int lmotor,rmotor,index;
   int mvalsread = 0;
   unsigned long before,after;
-
-//  Serial.println(digitalRead(PIN_SWITCH_LATCH_OPEN));
 
 //  action = 'k';
  switch(action){
@@ -95,28 +101,34 @@ void loop() {
 
    case 'k':
      Serial.println("Latching arm");
-     while(digitalRead(PIN_SWITCH_LATCH_CLOSE) == LOW){ //DRIVE WHILE SWITCH IS OPEN
-       latchMotor.drive(-150);
+     while(!digitalRead(PIN_SWITCH_LATCH_CLOSE)){ //DRIVE WHILE SWITCH IS OPEN
+       latchMotor.drive(-255);
      }
+    delay(50);
     Serial.println("Arm Latched");
     latchMotor.brake();
-    catapultMotor.drive(50);
-    delay(2000);
+    catapultMotor.drive(-150);
+    delay(500);
     catapultMotor.brake();
     
      break;
 
-   case 'r':
-     Serial.println("Releasing Arm motor");
-     catapultMotor.drive(-255);
-     delay(100);
-     catapultMotor.drive(0);
+   case 'a':
+     Serial.println("Releasing latch");
+     while(digitalRead(PIN_SWITCH_LATCH_OPEN)){ //DRIVE WHILE SWITCH IS OPEN
+       latchMotor.drive(255);
+     }
+     latchMotor.brake();
+     Serial.println("Latch released");
      break;
-
+  
    case 's':
-     Serial.println("Releasing Latch");
-     while(digitalRead(PIN_SWITCH_LATCH_OPEN) == HIGH){ //DRIVE WHILE SWITCH IS OPEN
-       latchMotor.drive(150);
+     Serial.println("Launching Catapult");
+     catapultMotor.drive(50);
+     delay(5000);
+     catapultMotor.drive(0);
+     while(digitalRead(PIN_SWITCH_LATCH_OPEN)){ //DRIVE WHILE SWITCH IS OPEN
+       latchMotor.drive(255);
      }
       Serial.println("Latch Released");
       latchMotor.brake();

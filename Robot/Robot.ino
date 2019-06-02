@@ -95,8 +95,8 @@ void loop() {
     break;
 
    case 'p':
-     Serial.println("Pulling arm back");
-     catapultMotor.drive(-255);
+      Serial.println("Pulling arm back");
+      catapultMotor.drive(-255);
      break;
 
    case 'k':
@@ -125,7 +125,7 @@ void loop() {
    case 's':
      Serial.println("Launching Catapult");
      catapultMotor.drive(50);
-     delay(5000);
+     delay(1500);
      catapultMotor.drive(0);
      while(digitalRead(PIN_SWITCH_LATCH_OPEN)){ //DRIVE WHILE SWITCH IS OPEN
        latchMotor.drive(255);
@@ -133,6 +133,12 @@ void loop() {
       Serial.println("Latch Released");
       latchMotor.brake();
      break;
+
+    case '0':
+     catapultMotor.drive(0);
+     latchMotor.drive(0);
+     leftWheel.drive(0);
+     rightWheel.drive(0);
 
      default:
      break;

@@ -75,10 +75,15 @@ void setup() {
   latchOpen.setInverted(true);
 }
 
+void setState(byte next){
+  Serial.println(next);
+  state = next;
+}
+
 //if action matches the given transition, then go to the next state
 void pollAction(char transitionAction, byte nextState){
   if(action == transitionAction){
-    state = nextState;
+    setState(nextState);
   }
 }
 
@@ -97,7 +102,7 @@ void loadOne(){
 
 void loop() {
   // put your main code here, to run repeatedly:
-  
+//  Serial.println(digitalRead(PIN_SWITCH_LATCH_CLOSE));
  if(Serial.available() > 0){
    action = Serial.read();
  }
@@ -116,6 +121,8 @@ void loop() {
   switch(state){
     case STATE_DEFAULT:
       //run drive motors
+      catapultMotor.drive(0);
+      latchMotor.brake();
       pollAction(BUTTON_ARM_PULL, STATE_PULLBACK);
       pollAction(BUTTON_UNLATCH, STATE_UNLATCHING);
       break;
@@ -135,6 +142,7 @@ void loop() {
         catapultMotor.brake();
         pollAction(BUTTON_UNLATCH, STATE_UNLATCHING);
       }
+      pollAction(BUTTON_RESET, STATE_DEFAULT);
       break;
     case STATE_LATCHING:
       //run latch motor
@@ -146,12 +154,13 @@ void loop() {
           //set up delay for unwinding motor
           rtDelay.reset();
           rtDelay.setDelay(1700);
-          state = STATE_LATCHED;
+          setState(STATE_LATCHED);
         }
         latchMotor.brake();
-        catapultMotor.drive(-150);
+        catapultMotor.drive(-100);
       }
       else{
+//        Serial.println("Waiting for close switch");
         //Switch Open
         latchMotor.drive(-255);
         catapultMotor.drive(-255);
@@ -162,10 +171,10 @@ void loop() {
       break;
     case STATE_UNLATCHING:
       //run latch motor
-      if(digitalRead(PIN_SWITCH_LATCH_OPEN)){
+      if(!digitalRead(PIN_SWITCH_LATCH_OPEN)){
         //switch pressed
         latchMotor.brake();
-        state = STATE_DEFAULT;
+        setState(STATE_DEFAULT);
       }
       else{
         latchMotor.drive(255);

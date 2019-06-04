@@ -24,7 +24,7 @@
 #define PIN_MOTOR_CATAPULT_IN1 52
 #define PIN_MOTOR_CATAPULT_IN2 53
 
-#define PIN_SERVO_LOAD 8
+#define PIN_SERVO_LOAD 7
 
 /* No longer used
 #define PIN_DEBUG_LED_1 10

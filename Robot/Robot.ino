@@ -10,6 +10,8 @@
 #define STATE_LATCHING 2 //latch engaging
 #define STATE_LATCHED 3 //latch engaged
 #define STATE_UNLATCHING 4 //latch disengaging
+#define STATE_LOAD 5 //latched
+#define STATE_LOAD_RESET 6
 
 #define BUTTON_DRIVE_LEFT 'L'
 #define BUTTON_DRIVE_RIGHT 'R'
@@ -68,7 +70,9 @@ void setup() {
 
   Serial.begin(115200);
   Serial.println("Connected");
+  pinMode(PIN_SERVO_LOAD, OUTPUT);
   loadingServo.attach(PIN_SERVO_LOAD);
+  loadingServo.write(0);
 
   Wheel::registerLeftRight(&leftWheel, &rightWheel);
 
@@ -102,7 +106,6 @@ void loadOne(){
 
 void loop() {
   // put your main code here, to run repeatedly:
-//  Serial.println(digitalRead(PIN_SWITCH_LATCH_CLOSE));
  if(Serial.available() > 0){
    action = Serial.read();
  }
@@ -125,6 +128,7 @@ void loop() {
       latchMotor.brake();
       pollAction(BUTTON_ARM_PULL, STATE_PULLBACK);
       pollAction(BUTTON_UNLATCH, STATE_UNLATCHING);
+      pollAction(BUTTON_LOAD_RESET, STATE_LOAD_RESET);
       break;
     case STATE_PULLBACK:
       //run catapult motor
@@ -140,9 +144,11 @@ void loop() {
       else{
         //wait for launch
         catapultMotor.brake();
+        pollAction(BUTTON_LOAD, STATE_LOAD);
         pollAction(BUTTON_UNLATCH, STATE_UNLATCHING);
       }
       pollAction(BUTTON_RESET, STATE_DEFAULT);
+      pollAction(BUTTON_LOAD_RESET, STATE_LOAD_RESET);
       break;
     case STATE_LATCHING:
       //run latch motor
@@ -180,6 +186,16 @@ void loop() {
         latchMotor.drive(255);
       }
       //poll for switch
+      break;
+
+    case STATE_LOAD:
+      loadOne();
+      setState(STATE_LATCHED);
+      break;
+
+    case STATE_LOAD_RESET:
+      loadingServo.write(0);
+      setState(STATE_DEFAULT);
       break;
   }
 }
